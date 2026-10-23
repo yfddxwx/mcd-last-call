@@ -257,5 +257,49 @@ class TestEligibility(unittest.TestCase):
         self.assertTrue(any("已排除" in n for n in notes), notes)
 
 
+class TestSolveScript(unittest.TestCase):
+    """scripts/solve.py 是技能的核心：JSON 进、结论出，必须与主流程同解。"""
+
+    def _run(self, payload):
+        import json
+        import subprocess
+        proc = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "solve.py"), "-"],
+            input=json.dumps(payload, ensure_ascii=False),
+            capture_output=True, text=True, encoding="utf-8",
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        return json.loads(proc.stdout)
+
+    def test_matches_cli_baseline(self):
+        out = self._run({
+            "now": "2026-10-23T12:20:00",
+            "deadline": "13:00",
+            "distance_m": 403,
+            "scenario": 1,
+            "store": {"code": "1420762", "name": "麦当劳深圳同方信息港餐厅"},
+            "candidates": [
+                {"code": "9900011123", "name": "“辣”么快乐套餐", "kind": "combo",
+                 "items": 3, "kcal": 394, "price_cents": 2400},
+                {"code": "9900004835", "name": "麦乐鸡经典中套餐", "kind": "combo",
+                 "items": 3, "kcal": 649, "price_cents": 2500},
+            ],
+        })
+        self.assertEqual(out["verdict"], "来得及")
+        self.assertEqual(out["last_order_time"], "12:30")
+        self.assertEqual(out["best"]["need_min"], 30)
+        self.assertEqual(out["walk_min"], 7)
+
+    def test_rejects_missing_now(self):
+        import subprocess
+        proc = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "solve.py"), "-"],
+            input='{"candidates":[{"name":"x"}]}',
+            capture_output=True, text=True, encoding="utf-8",
+        )
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("now", proc.stderr)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

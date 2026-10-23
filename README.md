@@ -13,6 +13,36 @@
 
 ---
 
+## 作为一个 Skill 安装
+
+**整个仓库本身就是一个可安装的 Skill**（`SKILL.md` + `scripts/` + `references/`）：
+
+```bash
+git clone https://github.com/yfddxwx/mcd-last-call.git ~/.workbuddy/skills/mcd-last-call
+```
+
+装完在 WorkBuddy 里直接说人话：
+
+> 我 12 点下班、1 点开会，楼下麦当劳走过去 8 分钟，现在 12:20 了，还来得及吃个巨无霸吗？
+
+Agent 会按 `SKILL.md` 的流程走：先调 `now-time-info` / `query-nearby-stores` / `query-meals` /
+`list-nutrition-foods` / `query-meal-detail` / `calculate-price` 取真实数据，
+再把数据喂给 `scripts/solve.py` 做**确定性求解**（不让模型心算），
+最后输出「最晚下单时刻」。
+
+```
+SKILL.md                  技能清单与工作流（触发条件、工具调用表、输出规范、禁止事项）
+scripts/plan.py           完整流水线，任意工作目录可用
+scripts/solve.py          纯计算器：JSON 进，结论出，不联网、不需要 Token
+references/timing-model.md 时间/热量公式与边界
+references/mcp-fields.md   每个工具的字段、单位、实测陷阱
+```
+
+`scripts/plan.py` 与根目录的 `mcd_last_call.py` 等价——多这一层是为了让脚本在被安装到
+`~/.workbuddy/skills/` 后仍能从任意当前目录运行。
+
+---
+
 ## 问题：不是没得选，是来不及选
 
 现在的点餐工具都在帮你回答"吃什么"——推套餐、算热量、凑满减。
@@ -187,6 +217,9 @@ python mcd_last_call.py --city 深圳 --keyword 科技园 --record
 ## 项目结构
 
 ```
+SKILL.md            技能清单：触发条件 / 工具调用表 / 输出规范 / 禁止事项
+scripts/            plan.py（完整流水线）、solve.py（纯计算器，JSON 进结论出）
+references/         timing-model.md、mcp-fields.md
 mcd_last_call.py    唯一入口：MCP 客户端 / 双数据源 / 求解器 / 终端卡片
 mcp_client.py       Streamable HTTP 传输层（标准库 urllib，含 SSE 解析与退避）
 probe_mcp.py        握手探针：验证连通性 + 落盘真实 tools/list schema
