@@ -1,4 +1,4 @@
-"""从离线快照生成试玩页的数据文件 demo/data.js。
+"""从离线快照生成试玩页的数据文件 docs/data.js。
 
 为什么要并集：场景 1 的候选是"稳妥的正餐"，场景 3 在热量受限时会把官方的
 「500大卡套餐」拉进候选（实测 394 / 412 kcal）。试玩页上有热量滑杆，
@@ -47,7 +47,7 @@ def main() -> int:
         "candidates": list(merged.values()),
     }
 
-    target = ROOT / "demo" / "data.js"
+    target = ROOT / "docs" / "data.js"
     target.write_text("window.MCD_DATA = " + json.dumps(payload, ensure_ascii=False, indent=1) + ";\n",
                       encoding="utf-8")
 

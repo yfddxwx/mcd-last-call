@@ -8,7 +8,7 @@
 `Python` · `0 第三方依赖` · 离线可跑 · 基于麦当劳中国官方 MCP
 
 > **[→ 打开在线试玩页](https://yfddxwx.github.io/mcd-last-call/)**（零安装、不联网、不读你的订单）
-> 打不开说明 Pages 还没开启：Settings → Pages → Source 选 `main` + `/demo` 即可。
+> 打不开说明 Pages 还没开启：Settings → Pages → Source 选 `main` + **`/docs`** 即可。
 > **[→ 30 秒本地跑通](#30-秒跑起来不用-token)**（需要 Python 3.10+，其他什么都不用）
 
 ---
@@ -225,7 +225,7 @@ mcp_client.py       Streamable HTTP 传输层（标准库 urllib，含 SSE 解�
 probe_mcp.py        握手探针：验证连通性 + 落盘真实 tools/list schema
 data/demo/          离线快照（真实响应原样录制）
 data/model/         可调的时长与热量参数
-demo/index.html     零配置试玩页（配合 data.js，打开即用）
+docs/index.html     零配置试玩页（GitHub Pages 的发布目录就是 docs/）
 docs/               数据口径 + MCP 工具 schema 快照
 tests/              18 个行为锁用例（无需 Token）
 ```
