@@ -7,7 +7,8 @@
 
 `Python` · `0 第三方依赖` · 离线可跑 · 基于麦当劳中国官方 MCP
 
-> **[→ 打开在线试玩页](demo/index.html)**（零安装、不联网、不读你的订单）
+> **[→ 打开在线试玩页](https://yfddxwx.github.io/mcd-last-call/)**（零安装、不联网、不读你的订单）
+> 打不开说明 Pages 还没开启：Settings → Pages → Source 选 `main` + `/demo` 即可。
 > **[→ 30 秒本地跑通](#30-秒跑起来不用-token)**（需要 Python 3.10+，其他什么都不用）
 
 ---
@@ -121,7 +122,7 @@ python mcd_last_call.py --demo --scenario 3 --minutes 40 --kcal 400 --budget 20
 只要装了 Python 3.10+：
 
 ```bash
-git clone <this-repo> && cd mcd-last-call
+git clone https://github.com/yfddxwx/mcd-last-call.git && cd mcd-last-call
 python mcd_last_call.py --demo --scenario 1 --deadline 13:00
 ```
 
@@ -214,6 +215,6 @@ MCP 调用细节、失败兜底、业务价值见 [`MCP_INTEGRATION.md`](MCP_INT
 
 ## 如果这个项目帮你少迟到一次
 
-去右上角点个 **Star** ⭐ —— 这是这个比赛唯一的计分方式，也是它继续更新的理由。
+去 [**https://github.com/yfddxwx/mcd-last-call**](https://github.com/yfddxwx/mcd-last-call) 右上角点个 **Star** ⭐ —— 这是这个比赛唯一的计分方式，也是它继续更新的理由。
 
 如果它算错了，开个 Issue 告诉我当时的门店、时间和实际用时，我把参数调准。
