@@ -1,0 +1,22 @@
+# secrets — never commit a real token
+.env
+.env.*
+!.env.example
+*.token
+token.txt
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# scratch
+_smoke.js
+_check.js
+*.log
+
+# os
+.DS_Store
+Thumbs.db
+dev/raw/

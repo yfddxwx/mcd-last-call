@@ -1,0 +1,117 @@
+[
+  {
+    "storeCode": "1420762",
+    "storeName": "麦当劳深圳同方信息港餐厅",
+    "address": "科技园北区朗山路11号同方信息港E栋G层5号商铺",
+    "distance": 403,
+    "businessStatus": true,
+    "businessStartTime": "07:00",
+    "businessEndTime": "23:00",
+    "longitude": 0.0,
+    "latitude": 0.0,
+    "reservation": true,
+    "reservationTimeOptions": [
+      {
+        "date": "2026-10-23",
+        "today": true,
+        "reservationOptionText": "宵夜(22:14至22:46)"
+      },
+      {
+        "date": "2026-10-24",
+        "today": false,
+        "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+      }
+    ]
+  },
+  {
+    "storeCode": "1420659",
+    "storeName": "麦当劳深圳金拱门食品有限公司(禹洲广场)餐厅",
+    "address": "科苑路共享大厦A座一层L1-01号/室商铺",
+    "distance": 477,
+    "businessStatus": true,
+    "businessStartTime": "07:00",
+    "businessEndTime": "23:00",
+    "longitude": 0.0,
+    "latitude": 0.0,
+    "reservation": true,
+    "reservationTimeOptions": [
+      {
+        "date": "2026-10-23",
+        "today": true,
+        "reservationOptionText": "宵夜(22:14至22:46)"
+      },
+      {
+        "date": "2026-10-24",
+        "today": false,
+        "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+      }
+    ]
+  },
+  {
+    "storeCode": "1420888",
+    "storeName": "麦当劳深圳科技园长园得来速餐厅",
+    "address": "粤海街道科技园社区高新中一道2号长园新材料港1 2 3 4栋的C栋一层102 103号",
+    "distance": 732,
+    "businessStatus": false,
+    "businessStartTime": "07:00",
+    "businessEndTime": "22:00",
+    "longitude": 0.0,
+    "latitude": 0.0,
+    "reservation": true,
+    "reservationTimeOptions": [
+      {
+        "date": "2026-10-24",
+        "today": false,
+        "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+      }
+    ]
+  },
+  {
+    "storeCode": "1421057",
+    "storeName": "麦当劳深圳松坪山餐厅",
+    "address": "西丽街道松坪山社区松坪山群芳街40号松坪村综合楼一层B39商铺",
+    "distance": 810,
+    "businessStatus": true,
+    "businessStartTime": "00:00",
+    "businessEndTime": "23:59",
+    "longitude": 0.0,
+    "latitude": 0.0,
+    "reservation": true,
+    "reservationTimeOptions": [
+      {
+        "date": "2026-10-23",
+        "today": true,
+        "reservationOptionText": "宵夜(22:14至23:59)"
+      },
+      {
+        "date": "2026-10-24",
+        "today": false,
+        "reservationOptionText": "宵夜(00:00至04:45,22:14至23:59)，早餐(05:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+      }
+    ]
+  },
+  {
+    "storeCode": "1420412",
+    "storeName": "麦当劳深圳科苑路餐厅",
+    "address": "讯美科技广场3号首层",
+    "distance": 1233,
+    "businessStatus": true,
+    "businessStartTime": "07:00",
+    "businessEndTime": "23:00",
+    "longitude": 0.0,
+    "latitude": 0.0,
+    "reservation": true,
+    "reservationTimeOptions": [
+      {
+        "date": "2026-10-23",
+        "today": true,
+        "reservationOptionText": "宵夜(22:14至22:46)"
+      },
+      {
+        "date": "2026-10-24",
+        "today": false,
+        "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+      }
+    ]
+  }
+]

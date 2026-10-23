@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>麦门末班车 · 这顿麦当劳还来得及吗</title>
+<meta name="description" content="算出这顿麦当劳还来不来得及，以及最晚几点必须下单。基于麦当劳中国 MCP 的离线快照，打开即用。">
+<style>
+  :root{
+    --red:#DA291C; --yellow:#FFC72C;
+    --ink:#1C1B1A; --ink2:#5F5E5A; --ink3:#8A8880;
+    --line:#E6E3DC; --card:#FFFFFF; --bg:#FAF8F3;
+    --ok:#0F6E56; --warn:#854F0B; --bad:#A32D2D;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 64px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .mark{width:34px;height:34px;border-radius:9px;background:var(--red);position:relative;flex:none}
+  .mark::after{content:"";position:absolute;inset:11px 8px;border-radius:3px;background:var(--yellow)}
+  h1{font-size:19px;font-weight:600;margin:0;letter-spacing:.2px}
+  .sub{color:var(--ink2);font-size:13.5px;margin:2px 0 26px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+  .row{display:flex;justify-content:space-between;gap:16px}
+  .store{font-size:14px;font-weight:500}
+  .addr{color:var(--ink3);font-size:12.5px;margin-top:2px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;margin-top:4px}
+  label{display:block;font-size:12.5px;color:var(--ink2);margin-bottom:6px}
+  label b{color:var(--ink);font-weight:600;font-size:13.5px}
+  input[type=range]{width:100%;accent-color:var(--red);height:22px}
+  .verdict{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .badge{font-size:26px;font-weight:600;letter-spacing:.5px;line-height:1.2}
+  .badge.ok{color:var(--ok)} .badge.warn{color:var(--warn)} .badge.bad{color:var(--bad)}
+  .lot{text-align:right}
+  .lot .k{font-size:12px;color:var(--ink3)}
+  .lot .v{font-size:38px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .lot .v.muted{color:var(--ink3);font-size:26px}
+  .hint{font-size:12.5px;color:var(--ink2);margin-top:10px}
+  .bar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:18px 0 8px;border:1px solid var(--line)}
+  .bar div{display:flex;align-items:center;justify-content:center;font-size:11.5px;white-space:nowrap;overflow:hidden}
+  .seg-wait{background:#FAEEDA;color:#633806}
+  .seg-eat{background:#EEEDFE;color:#3C3489}
+  .seg-back{background:#E1F5EE;color:#085041}
+  .seg-free{background:#F4F2EC;color:#8A8880}
+  .legend{display:flex;gap:14px;font-size:11.5px;color:var(--ink3);flex-wrap:wrap}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:1px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;font-weight:500;color:var(--ink3);font-size:11.5px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  td{padding:10px 0;border-bottom:1px solid #F2F0EA;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.n{font-variant-numeric:tabular-nums}
+  .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;background:#F4F2EC;color:var(--ink2);margin-left:6px}
+  .fail{color:var(--bad);font-size:12px}
+  .note{font-size:12px;color:var(--ink3);line-height:1.9}
+  .star{background:#1C1B1A;color:#fff;text-align:center;border-radius:14px;padding:22px}
+  .star a{color:var(--yellow);text-decoration:none;font-weight:600}
+  .foot{font-size:11.5px;color:var(--ink3);text-align:center;margin-top:22px;line-height:1.9}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}.lot{text-align:left}.badge{font-size:22px}.lot .v{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="mark"></div><h1>麦门末班车 · mcd-last-call</h1></header>
+  <p class="sub">不是推荐你吃什么，是告诉你<strong>现在点还赶不赶得上</strong>，以及最晚几点必须下单。</p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <div class="store" id="storeName"></div>
+        <div class="addr" id="storeAddr"></div>
+      </div>
+      <div class="addr" id="clock" style="text-align:right"></div>
+    </div>
+    <div class="grid">
+      <div>
+        <label>我还能用 <b id="vBudget">40</b> 分钟</label>
+        <input type="range" id="budget" min="10" max="90" step="1" value="40">
+      </div>
+      <div>
+        <label>走过去 <b id="vWalk">7</b> 分钟</label>
+        <input type="range" id="walk" min="2" max="25" step="1" value="7">
+      </div>
+      <div>
+        <label>热量上限 <b id="vKcal">不限</b></label>
+        <input type="range" id="kcal" min="0" max="1200" step="50" value="0">
+      </div>
+      <div>
+        <label>预算上限 <b id="vMoney">不限</b></label>
+        <input type="range" id="money" min="0" max="60" step="1" value="0">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="verdict">
+      <div>
+        <div class="badge" id="verdict">—</div>
+        <div class="hint" id="verdictHint"></div>
+      </div>
+      <div class="lot">
+        <div class="k">最晚下单时刻</div>
+        <div class="v" id="lot">--:--</div>
+      </div>
+    </div>
+    <div class="bar" id="bar"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:#FAC775"></i>等待+缓冲（步行与出餐取较大值）</span>
+      <span><i class="dot" style="background:#CECBF6"></i>吃</span>
+      <span><i class="dot" style="background:#9FE1CB"></i>返程</span>
+      <span><i class="dot" style="background:#E6E3DC"></i>余量</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>能来得及的一单</th><th style="text-align:right">价格</th><th style="text-align:right">热量</th><th style="text-align:right">需要</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="note" id="notes" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card note" style="background:#FCFBF8">
+    <strong style="color:var(--ink)">这个页面在算什么</strong><br>
+    等待 = max(步行, 出餐)，因为你在路上走的时候后厨已经在做了；再加上吃饭和返程，就是你这一趟的总耗时。
+    「最晚下单时刻」= 截止时间 − 这段总耗时，晚于它，最早的一单也赶不上。<br>
+    出餐时长是按品类结构估算的（套餐 5.5 分钟基值 × 午高峰 1.4 × 单品数），<strong>不是门店实时排队数据</strong>；
+    热量来自麦当劳官方营养表，查不到的项不给假数字。参数在 <code>data/model/prep_time.json</code> 里可改。
+  </div>
+
+  <div class="star">
+    <div style="font-size:15px;margin-bottom:6px">如果它帮你少迟到一次</div>
+    <a href="https://github.com/" id="starLink">去 GitHub 点个 Star ★</a>
+    <div style="font-size:11.5px;color:#9b9891;margin-top:10px">离线快照演示 · 不联网 · 不读你的订单</div>
+  </div>
+
+  <div class="foot">
+    参赛作品，非麦当劳官方产品 · 餐品与价格以麦当劳官方渠道实时结果为准<br>
+    数据快照：<span id="snap"></span>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  var D = window.MCD_DATA;
+  if(!D){ document.getElementById('verdict').textContent='缺少 data.js'; return; }
+
+  var toMin = function(hhmm){ var p = hhmm.split(':'); return (+p[0])*60 + (+p[1]); };
+  var toHHMM = function(m){
+    m = Math.round(m); if(m < 0) return null;
+    m = ((m % 1440) + 1440) % 1440;
+    return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
+  };
+
+  var NOW = toMin(D.story_now);
+  var BUFFER = 5;
+
+  document.getElementById('storeName').textContent = D.store.name;
+  document.getElementById('storeAddr').textContent = D.store.address + ' · ' + D.store.distance_m + 'm';
+  document.getElementById('clock').textContent = '现在 ' + D.story_now + ' · 快照数据';
+  document.getElementById('snap').textContent = D.store.name + ' / ' + D.candidates.length + ' 个 SKU / story time ' + D.story_now;
+
+  var el = {
+    budget: document.getElementById('budget'), walk: document.getElementById('walk'),
+    kcal: document.getElementById('kcal'), money: document.getElementById('money'),
+    vBudget: document.getElementById('vBudget'), vWalk: document.getElementById('vWalk'),
+    vKcal: document.getElementById('vKcal'), vMoney: document.getElementById('vMoney'),
+    verdict: document.getElementById('verdict'), hint: document.getElementById('verdictHint'),
+    lot: document.getElementById('lot'), bar: document.getElementById('bar'),
+    rows: document.getElementById('rows'), notes: document.getElementById('notes')
+  };
+
+  function solve(){
+    var budget = +el.budget.value, walk = +el.walk.value;
+    var kcalCap = +el.kcal.value, moneyCap = +el.money.value;
+
+    var pool = D.candidates.map(function(c){
+      var wait = Math.max(walk, c.prep_min);
+      var need = wait + c.eat_min + walk + BUFFER;
+      return {
+        name:c.name, price:c.price_cents, kcal:c.kcal[1], kcalLo:c.kcal[0], kcalHi:c.kcal[2],
+        coverage:c.kcal_coverage, prep:c.prep_min, eat:c.eat_min, wait:wait,
+        need:need, slack:budget - need
+      };
+    });
+
+    var fit = pool.filter(function(c){
+      if(kcalCap && c.kcal > kcalCap) return false;
+      if(moneyCap && c.price > moneyCap*100) return false;
+      return true;
+    });
+
+    var feasible = fit.filter(function(c){ return c.slack >= 0; })
+                      .sort(function(a,b){ return b.slack - a.slack; });
+
+    var best, verdict, hint;
+    if(feasible.length){
+      best = feasible[0];
+      if(best.slack >= 3){
+        verdict = '✓ 来得及'; el.verdict.className = 'badge ok';
+        hint = '最快的一单 ' + best.need + ' 分钟，还剩 ' + best.slack + ' 分钟';
+      }else{
+        verdict = '△ 卡线'; el.verdict.className = 'badge warn';
+        hint = '只多出 ' + best.slack + ' 分钟，出门别绕路';
+      }
+    }else if(fit.length){
+      best = fit.sort(function(a,b){ return a.need - b.need; })[0];
+      verdict = '✗ 来不及'; el.verdict.className = 'badge bad';
+      hint = '最快的一单也要 ' + best.need + ' 分钟，还差 ' + (best.need - budget) + ' 分钟';
+    }else{
+      verdict = '· 无可行选项'; el.verdict.className = 'badge warn';
+      hint = '当前约束下没有能吃的，松开滑杆试试';
+      best = null;
+    }
+
+    el.verdict.textContent = verdict;
+    el.hint.textContent = hint;
+
+    if(best && best.slack >= 0){
+      var lot = NOW + budget - best.need;
+      el.lot.textContent = toHHMM(lot);
+      el.lot.className = 'v';
+    }else{
+      el.lot.textContent = '已过';
+      el.lot.className = 'v muted';
+    }
+
+    drawBar(budget, best);
+
+    var rows = feasible.length ? feasible : (fit.length ? fit.sort(function(a,b){return a.need-b.need;}) : []);
+    el.rows.innerHTML = rows.slice(0,4).map(function(c){
+      var kcalTxt = (c.kcalLo === c.kcalHi) ? c.kcalLo : (c.kcalLo + '-' + c.kcalHi);
+      var short = c.slack < 0 ? ' <span class="fail">赶不上</span>' : '';
+      return '<tr><td>' + c.name + short +
+             '<span class="tag">出餐 ' + c.prep + '′</span></td>' +
+             '<td class="n" style="text-align:right">¥' + (c.price/100).toFixed(2) + '</td>' +
+             '<td class="n" style="text-align:right">' + kcalTxt + '</td>' +
+             '<td class="n" style="text-align:right">' + c.need + '′</td></tr>';
+    }).join('') || '<tr><td colspan="4" style="color:#8A8880">没有符合条件的一单</td></tr>';
+
+    var notes = ['计算方式：max(步行 ' + walk + ', 出餐) + 吃 + 返程 ' + walk + ' + 缓冲 ' + BUFFER + ' = 需要分钟数',
+                 '热量为上架快照里能匹配到官方营养表的项之和；覆盖 ' + (D.candidates[0] ? D.candidates[0].kcal_coverage : '-')];
+    if(kcalCap) notes.push('热量上限 ' + kcalCap + ' kcal');
+    if(moneyCap) notes.push('预算上限 ¥' + moneyCap);
+    el.notes.innerHTML = notes.join('<br>');
+  }
+
+  function drawBar(budget, best){
+    var total = budget;
+    var segs;
+    if(best && best.need <= budget + 30){
+      var wait = Math.min(best.wait + BUFFER, total);
+      var eat = Math.min(best.eat, Math.max(0, total - wait));
+      var back = Math.min(window.__walk || 0, Math.max(0, total - wait - eat));
+      segs = [
+        ['seg-wait', wait, '等待 ' + (best.wait + BUFFER)],
+        ['seg-eat', eat, '吃 ' + best.eat],
+        ['seg-back', back, '返程 ' + back],
+        ['seg-free', Math.max(0, total - wait - eat - back), '余 ' + Math.max(0, total - wait - eat - back)]
+      ];
+    }else{
+      segs = [['seg-free', total, '可用 ' + total + ' 分钟']];
+    }
+    el.bar.innerHTML = segs.filter(function(s){ return s[1] > 0; }).map(function(s){
+      var pct = (s[1] / total) * 100;
+      return '<div class="' + s[0] + '" style="flex:0 0 ' + pct + '%">' + (pct > 11 ? s[2] + '′' : '') + '</div>';
+    }).join('');
+  }
+
+  ['budget','walk','kcal','money'].forEach(function(k){
+    el[k].addEventListener('input', function(){
+      window.__walk = +el.walk.value;
+      el.vBudget.textContent = el.budget.value;
+      el.vWalk.textContent = el.walk.value;
+      el.vKcal.textContent = (+el.kcal.value === 0) ? '不限' : el.kcal.value;
+      el.vMoney.textContent = (+el.money.value === 0) ? '不限' : '¥' + el.money.value;
+      solve();
+    });
+  });
+
+  // keep the timeline honest: 返程 always equals the walk slider
+  var origSolve = solve;
+  solve = function(){ window.__walk = +el.walk.value; origSolve(); };
+
+  el.walk.value = D.store.walk_min;
+  el.vWalk.textContent = D.store.walk_min;
+  el.vBudget.textContent = el.budget.value;
+  el.vKcal.textContent = '不限';
+  el.vMoney.textContent = '不限';
+  solve();
+})();
+</script>
+</body>
+</html>

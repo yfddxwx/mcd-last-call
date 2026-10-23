@@ -1,0 +1,13 @@
+{
+  "recorded_at": "2026-10-23T22:26:49",
+  "story_now": "2026-10-23T12:20:00",
+  "server_now": "2026-10-23T22:26:42",
+  "city": null,
+  "store": {
+    "code": "1420762",
+    "name": "麦当劳深圳同方信息港餐厅",
+    "address": "科技园北区朗山路11号同方信息港E栋G层5号商铺",
+    "distance": 403
+  },
+  "note": "story_now 是回放时使用的叙事时间；server_now 是真实采集时间"
+}

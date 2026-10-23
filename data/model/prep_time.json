@@ -1,0 +1,22 @@
+{
+  "_comment": "出餐时长模型。全部是可调的先验参数，不是麦当劳官方数据。改这里会直接改变判定结果。",
+  "note": "出餐时长为结构估算（品类基值 × 时段繁忙系数 × 单品数量），非门店实时排队数据",
+  "base": {
+    "combo": 5.5,
+    "burger": 4.0,
+    "snack": 3.0,
+    "drink": 2.0,
+    "dessert": 2.0,
+    "other": 4.0
+  },
+  "busy": [
+    { "start": "11:30", "end": "13:00", "factor": 1.4, "label": "午高峰" },
+    { "start": "17:30", "end": "19:00", "factor": 1.3, "label": "晚高峰" }
+  ],
+  "eat_kcal_per_min": 60,
+  "eat_min_floor": 6,
+  "eat_min_ceiling": 20,
+  "walk_m_per_min": 75,
+  "detour_factor": 1.25,
+  "buffer_default_min": 5
+}

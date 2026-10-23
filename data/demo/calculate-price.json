@@ -1,0 +1,91 @@
+{
+  "productOriginalPrice": 30700,
+  "productPrice": 30700,
+  "originalPrice": 30700,
+  "discount": 0,
+  "price": 30700,
+  "productList": [
+    {
+      "productCode": "9900011123",
+      "productName": "“辣”么快乐套餐",
+      "quantity": 1,
+      "originalSubtotal": 2400,
+      "subtotal": 2400
+    },
+    {
+      "productCode": "9900009245",
+      "productName": "牛气满满套餐",
+      "quantity": 1,
+      "originalSubtotal": 3500,
+      "subtotal": 3500
+    },
+    {
+      "productCode": "9900004835",
+      "productName": "麦乐鸡经典中套餐",
+      "quantity": 1,
+      "originalSubtotal": 2500,
+      "subtotal": 2500
+    },
+    {
+      "productCode": "9900005449",
+      "productName": "吉士汉堡包中套餐",
+      "quantity": 1,
+      "originalSubtotal": 2600,
+      "subtotal": 2600
+    },
+    {
+      "productCode": "9900005453",
+      "productName": "麦香鸡中套餐",
+      "quantity": 1,
+      "originalSubtotal": 2800,
+      "subtotal": 2800
+    },
+    {
+      "productCode": "9900005456",
+      "productName": "麦辣鸡腿汉堡三件套",
+      "quantity": 1,
+      "originalSubtotal": 3350,
+      "subtotal": 3350
+    },
+    {
+      "productCode": "9900005460",
+      "productName": "麦香鱼中套餐",
+      "quantity": 1,
+      "originalSubtotal": 3350,
+      "subtotal": 3350
+    },
+    {
+      "productCode": "9900005430",
+      "productName": "芝士安格斯厚牛堡三件套",
+      "quantity": 1,
+      "originalSubtotal": 4250,
+      "subtotal": 4250
+    },
+    {
+      "productCode": "9900005428",
+      "productName": "培根安格斯厚牛堡三件套",
+      "quantity": 1,
+      "originalSubtotal": 4550,
+      "subtotal": 4550
+    },
+    {
+      "productCode": "1401",
+      "productName": "麦乐鸡5块",
+      "quantity": 1,
+      "originalSubtotal": 1400,
+      "subtotal": 1400
+    }
+  ],
+  "takeWayList": [
+    {
+      "code": "eat-in",
+      "title": "堂食",
+      "subtitle": "店内用餐"
+    },
+    {
+      "code": "locker-out",
+      "title": "外带",
+      "subtitle": "店外取餐柜"
+    }
+  ]
+}
